@@ -133,8 +133,8 @@ int main() {
         case 5:
             continuar = 0;
             break;
-
-             default:
+            
+            default:
             printf("Opcao invalida!\n");
         }
         
