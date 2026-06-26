@@ -3,6 +3,8 @@
 #include <string.h>
 #include <locale.h>
 
+int falsos_positivos = 0;
+
 void menu() {
 
     printf("\n");
@@ -37,6 +39,49 @@ void inserir_usuario() {
     printf("\nUsuario cadastrado com sucesso!\n");
 }
 
+
+void consultar_usuario() {
+
+    char usuario[12];
+
+    printf("---------------------\n");
+    printf("|  CONSULTAR USUARIO |\n");
+    printf("---------------------\n");
+
+    printf("Usuario (8 letras + 3 numeros) ");
+    scanf("%11s", usuario);
+
+    getchar();
+
+ // if (!bloom_consultar(bloom, usuario)) {
+    //     printf("\n Usuario nao encontrado!\n");
+    //     return;
+    // }
+
+    //se o filtro de bloom retornar que o usuario pode existir consultamos a tabela hash
+
+    // Usuario *resultado = hash_consultar(hash, usuario);
+
+    // if (resultado != NULL) {
+    //     printf("\nUsuario encontrado!\n");
+    //     printf("Usuario: %s\n", resultado->usuario);
+    //     printf("Nome: %s\n", resultado->nome);
+
+    // } else {
+    //     printf("\nUsuario nao encontrado.\n");
+    //     printf("Falso positivo do Filtro de Bloom.\n");
+     // falsos_positivos++;
+    // }
+}
+
+
+
+void Mostrar_estatisticas() { 
+    printf("\n--- ESTATÍSTICAS DA TABELA HASH ---\n");
+    // hash_exibir_estatisticas(hash);
+    printf("\n----ESTATÍSTICAS DO FILTRO BLOOM ---\n");
+    // bloom_exibir_estatisticas(bloom);
+}
 
 
 void carregar_arquivo() { 
