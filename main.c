@@ -69,10 +69,12 @@ int main() {
 
         switch(opcao) {
 
-        case 1:
+        case 1: 
+        inserir_usuario();
             break;
-
-        case 2:
+            
+            case 2:
+            printf("\nConsultar usuarios.\n");
             break;
 
         case 3:
@@ -87,13 +89,12 @@ int main() {
             continuar = 0;
             break;
 
-        default:
+             default:
             printf("Opcao invalida!\n");
         }
         
         
     }
-
     printf("\nPrograma finalizado!\n");
 
     return 0;
