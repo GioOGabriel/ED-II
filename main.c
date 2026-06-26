@@ -17,6 +17,42 @@ void menu() {
     printf("Opcao: ");
 }
 
+void inserir_usuario() {
+
+    char usuario[12];
+
+    printf("\n---------------------------\n");
+    printf("| INSERIR NOVO USUARIO     |\n");
+    printf("---------------------------\n");
+
+    printf("Usuario (8 letras + 3 numeros) ");
+    scanf("%11s", usuario);
+
+    getchar();
+
+    // Essas funções serão implementadas depois
+    // hash_inserir(hash, usuario);
+    // bloom_inserir(bloom, usuario);
+
+    printf("\nUsuario cadastrado com sucesso!\n");
+}
+
+
+
+void carregar_arquivo() { 
+
+    FILE* arquivo = fopen("usuarios.txt", "r");
+
+    if (arquivo == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return;
+    }
+
+    fclose(arquivo);
+}
+
+
+
 int main() {
 
     setlocale(LC_ALL, "");
@@ -40,9 +76,11 @@ int main() {
             break;
 
         case 3:
+            printf("\nEstatisticas.\n");
             break;
 
         case 4:
+            printf("\nInserir usuarios em lote.\n");
             break;
 
         case 5:
@@ -52,6 +90,8 @@ int main() {
         default:
             printf("Opcao invalida!\n");
         }
+        
+        
     }
 
     printf("\nPrograma finalizado!\n");
