@@ -79,7 +79,7 @@ void consultar_usuario() {
 void Mostrar_estatisticas() { 
     printf("\n--- ESTATÍSTICAS DA TABELA HASH ---\n");
     // hash_exibir_estatisticas(hash);
-    printf("\n----ESTATÍSTICAS DO FILTRO BLOOM ---\n");
+    printf("\n----ESTATÍSTICAS DO FILTRO BLOOM  ---\n");
     // bloom_exibir_estatisticas(bloom);
 }
 
