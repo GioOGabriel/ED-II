@@ -1,5 +1,5 @@
 #ifndef HASH_H
-#define HASH.H
+#define HASH_H
 #include <stdbool.h>
 
 // estrutura de nó para tratamento de colisao por encadeamento externo
