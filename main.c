@@ -70,10 +70,9 @@ void consultar_usuario() {
     // } else {
     //     printf("\nUsuario nao encontrado.\n");
     //     printf("Falso positivo do Filtro de Bloom.\n");
-     // falsos_positivos++;
+    // falsos_positivos++;
     // }
 }
-
 
 
 void Mostrar_estatisticas() { 
