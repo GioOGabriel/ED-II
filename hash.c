@@ -135,6 +135,44 @@ bool hash_buscar(TabelaHash *th, const char *nome_usuario) {
 }
 
 // ----------------------------------------------------------------
+// remover um nome de usuario da tabela
+// ----------------------------------------------------------------
+// calcula o indice, percorre a lista ate achar e remove.
+// ajusta os ponteiros, libera a string e o no.
+// retorna true se removeu, false se nao encontrou.
+// ----------------------------------------------------------------
+bool hash_remover(TabelaHash *th, const char *nome_usuario) {
+    unsigned int indice = hash_calcular_indice(nome_usuario, th->tamanho);
+
+    No *atual = th->vetor_tabela[indice];
+    No *anterior = NULL;
+
+    while (atual != NULL) {
+        if (strcmp(atual->nome_usuario, nome_usuario) == 0) {
+            // achou, agora remove
+
+            if (anterior == NULL) {
+                // eh o primeiro da lista
+                th->vetor_tabela[indice] = atual->proximo;
+            } else {
+                // ta no meio ou no fim
+                anterior->proximo = atual->proximo;
+            }
+
+            free(atual->nome_usuario);
+            free(atual);
+            th->total_elementos--;
+            return true;
+        }
+
+        anterior = atual;
+        atual = atual->proximo;
+    }
+
+    return false; // nao encontrou
+}
+
+// ----------------------------------------------------------------
 // destruir a tabela e liberar memoria
 // ----------------------------------------------------------------
 // precisa liberar cada no, cada string, o vetor e a struct.

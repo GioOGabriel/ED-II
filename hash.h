@@ -22,6 +22,7 @@ TabelaHash* hash_criar(int tamanho);
 unsigned int hash_calcular_indice(const char *texto, int tamanho_tabela);
 bool hash_inserir(TabelaHash *th, const char *nome_usuario);
 bool hash_buscar(TabelaHash *th, const char *nome_usuario);
+bool hash_remover(TabelaHash *th, const char *nome_usuario);
 void hash_destruir(TabelaHash *th); 
 
 
