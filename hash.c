@@ -40,6 +40,11 @@ unsigned int hash_calcular_indice(const char *texto, int tamanho_tabela) {
 // usa calloc porque ja deixa tudo null (menos trabalho).
 // ----------------------------------------------------------------
 TabelaHash* hash_criar(int tamanho) {
+
+     if (tamanho <= 0) {
+        return NULL;
+     }
+     
     // aloca a tabela em si
     TabelaHash *th = (TabelaHash*) malloc(sizeof(TabelaHash));
     if (th == NULL) {
