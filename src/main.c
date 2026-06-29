@@ -51,9 +51,9 @@ void gerar_nome_aleatorio(char *buffer) {
 void executar_experimentos() {
 
     const char *arquivos[] = {
-        "usuarios_1000.txt",
-        "usuarios_10000.txt",
-        "usuarios_100000.txt"
+        "data/usuarios_1000.txt",
+        "data/usuarios_10000.txt",
+        "data/usuarios_100000.txt"
     };
     const int quantidades[] = {1000, 10000, 100000};
     const int NUM_CENARIOS = 3;
