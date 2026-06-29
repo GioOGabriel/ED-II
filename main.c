@@ -15,6 +15,11 @@ FiltroBloom *bloom = NULL;
 
 int falsos_positivos = 0;
 
+int consultas_realizadas = 0;
+int consultas_evitas_bloom = 0;
+double tempo_total_consultas = 0.0;
+
+
 void menu() {
 
     printf("\n");
@@ -65,27 +70,64 @@ void consultar_usuario() {
 
     getchar();
 
-if (!bloom_buscar(bloom, usuario)) {
-    printf("\nUsuario nao encontrado!\n");
-    return;
+    // Início da medição do tempo
+    clock_t inicio = clock();
+
+    if (!bloom_buscar(bloom, usuario)) {
+
+        consultas_evitas_bloom++;
+
+        printf("\nUsuario nao encontrado!\n");
+
+        // Fim da medição
+        clock_t fim = clock();
+
+        double tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+
+        tempo_total_consultas += tempo;
+        consultas_realizadas++;
+
+        return;
+    }
+
+    // Consulta na tabela hash
+    if (hash_buscar(hash, usuario)) {
+
+        printf("\nUsuario encontrado!\n");
+        printf("Usuario: %s\n", usuario);
+
+    } else {
+
+        printf("\nUsuario nao encontrado.\n");
+        printf("Falso positivo do Filtro de Bloom.\n");
+
+        falsos_positivos++;
+    }
+
+    // Fim da medição
+    clock_t fim = clock();
+
+    double tempo = (double)(fim - inicio) / CLOCKS_PER_SEC;
+
+    tempo_total_consultas += tempo;
+    consultas_realizadas++;
 }
 
-    //se o filtro de bloom retornar que o usuario pode existir consultamos a tabela hash
-
-   if (hash_buscar(hash, usuario)) {
-
-    printf("\nUsuario encontrado!\n");
-    printf("Usuario: %s\n", usuario);
-
-} else {
-
-    printf("\nUsuario nao encontrado.\n");
-    printf("Falso positivo do Filtro de Bloom.\n");
-    falsos_positivos++;
-}
-}
 
 void Mostrar_estatisticas() {
+
+    double tempo_medio = 0;
+    double taxa_fp = 0;
+
+    int consultas_hash = consultas_realizadas - consultas_evitas_bloom;
+
+    if (consultas_realizadas > 0) {
+        tempo_medio = tempo_total_consultas / consultas_realizadas;
+    }
+
+    if (consultas_hash > 0) {
+        taxa_fp = (double)falsos_positivos / consultas_hash * 100;
+    }
 
     printf("\n--- ESTATISTICAS DA TABELA HASH ---\n");
 
@@ -112,6 +154,20 @@ void Mostrar_estatisticas() {
                bloom->total_funcoes_hash,
                hash_obter_total_elementos(hash)
            ));
+
+    printf("\n--- ESTATISTICAS DAS CONSULTAS ---\n");
+
+    printf("Consultas realizadas: %d\n",
+           consultas_realizadas);
+
+    printf("Consultas evitadas pelo Bloom: %d\n",
+           consultas_evitas_bloom);
+
+    printf("Taxa de falsos positivos: %.2lf%%\n",
+           taxa_fp);
+
+    printf("Tempo medio de consulta: %.9lf segundos\n",
+           tempo_medio);
 }
 
 
