@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include <locale.h>
 
 #include "hash.h"
@@ -114,18 +115,65 @@ void Mostrar_estatisticas() {
 }
 
 
-void carregar_arquivo() { 
 
-    FILE* arquivo = fopen("usuarios.txt", "r");
+
+
+void carregar_arquivo() {
+
+    
+    int opcao;
+    char nome_arquivo[30];
+
+    printf("\nQual arquivo deseja carregar?\n");
+    printf("[1] usuarios_1000.txt\n");
+    printf("[2] usuarios_10000.txt\n");
+    printf("[3] usuarios_100000.txt\n");
+    printf("Opcao: ");
+    scanf("%d", &opcao);
+    getchar();
+
+    switch (opcao) {
+
+        case 1:
+            strcpy(nome_arquivo, "usuarios_1000.txt");
+            break;
+
+        case 2:
+            strcpy(nome_arquivo, "usuarios_10000.txt");
+            break;
+
+        case 3:
+            strcpy(nome_arquivo, "usuarios_100000.txt");
+            break;
+
+        default:
+            printf("Opcao invalida!\n");
+            return;
+    }
+
+    FILE *arquivo = fopen(nome_arquivo, "r");
 
     if (arquivo == NULL) {
-        printf("Erro ao abrir o arquivo.\n");
+        printf("Erro ao abrir o arquivo %s\n", nome_arquivo);
         return;
     }
 
-    fclose(arquivo);
-}
+    char usuario[12];
+    int inseridos = 0;
 
+    while (fscanf(arquivo, "%11s", usuario) == 1) {
+
+        if (hash_inserir(hash, usuario)) {
+
+            bloom_inserir(bloom, usuario);
+            inseridos++;
+        }
+    }
+
+    fclose(arquivo);
+
+    printf("\n%d usuarios inseridos do arquivo %s\n", inseridos, nome_arquivo);
+}
 
 
 int main() {
