@@ -3,6 +3,15 @@
 #include <string.h>
 #include <locale.h>
 
+#include "hash.h"
+#include "bloom.h"
+#define TAMANHO_HASH 12007
+#define TAMANHO_BLOOM 65536
+#define NUM_FUNCOES_BLOOM 7
+
+TabelaHash *hash = NULL;
+FiltroBloom *bloom = NULL;
+
 int falsos_positivos = 0;
 
 void menu() {
@@ -32,11 +41,13 @@ void inserir_usuario() {
 
     getchar();
 
-    // Essas funções serão implementadas depois
-    // hash_inserir(hash, usuario);
-    // bloom_inserir(bloom, usuario);
-
+    
+    if (hash_inserir(hash, usuario)) {
+    bloom_inserir(bloom, usuario);
     printf("\nUsuario cadastrado com sucesso!\n");
+} else {
+    printf("\nUsuario ja cadastrado!\n");
+}
 }
 
 
@@ -53,33 +64,53 @@ void consultar_usuario() {
 
     getchar();
 
- // if (!bloom_consultar(bloom, usuario)) {
-    //     printf("\n Usuario nao encontrado!\n");
-    //     return;
-    // }
+if (!bloom_buscar(bloom, usuario)) {
+    printf("\nUsuario nao encontrado!\n");
+    return;
+}
 
     //se o filtro de bloom retornar que o usuario pode existir consultamos a tabela hash
 
-    // Usuario *resultado = hash_consultar(hash, usuario);
+   if (hash_buscar(hash, usuario)) {
 
-    // if (resultado != NULL) {
-    //     printf("\nUsuario encontrado!\n");
-    //     printf("Usuario: %s\n", resultado->usuario);
-    //     printf("Nome: %s\n", resultado->nome);
+    printf("\nUsuario encontrado!\n");
+    printf("Usuario: %s\n", usuario);
 
-    // } else {
-    //     printf("\nUsuario nao encontrado.\n");
-    //     printf("Falso positivo do Filtro de Bloom.\n");
-    // falsos_positivos++;
-    // }
+} else {
+
+    printf("\nUsuario nao encontrado.\n");
+    printf("Falso positivo do Filtro de Bloom.\n");
+    falsos_positivos++;
+}
 }
 
+void Mostrar_estatisticas() {
 
-void Mostrar_estatisticas() { 
-    printf("\n--- ESTATÍSTICAS DA TABELA HASH ---\n");
-    // hash_exibir_estatisticas(hash);
-    printf("\n----ESTATÍSTICAS DO FILTRO BLOOM  ---\n");
-    // bloom_exibir_estatisticas(bloom);
+    printf("\n--- ESTATISTICAS DA TABELA HASH ---\n");
+
+    printf("Total de elementos: %d\n",
+           hash_obter_total_elementos(hash));
+
+    printf("Total de colisoes: %d\n",
+           hash_obter_total_colisoes(hash));
+
+    printf("Fator de carga: %.2f\n",
+           hash_obter_fator_carga(hash));
+
+    printf("\n--- ESTATISTICAS DO BLOOM FILTER ---\n");
+
+    printf("Taxa de ocupacao: %.2lf%%\n",
+           bloom_taxa_ocupacao(bloom) * 100);
+
+    printf("Falsos positivos encontrados: %d\n",
+           falsos_positivos);
+
+    printf("Probabilidade teorica: %.6lf\n",
+           bloom_calcular_falso_positivo(
+               bloom->tamanho_bits,
+               bloom->total_funcoes_hash,
+               hash_obter_total_elementos(hash)
+           ));
 }
 
 
@@ -101,6 +132,14 @@ int main() {
 
     setlocale(LC_ALL, "");
 
+   hash = hash_criar(TAMANHO_HASH);
+   bloom = bloom_criar(TAMANHO_BLOOM, NUM_FUNCOES_BLOOM);
+
+    if (hash == NULL || bloom == NULL) {
+    printf("Erro ao criar as estruturas de dados.\n");
+    return 1;
+}
+
     int opcao;
     int continuar = 1;
 
@@ -114,22 +153,22 @@ int main() {
         switch(opcao) {
 
         case 1: 
-        inserir_usuario();
+            inserir_usuario();
             break;
             
             case 2:
-            printf("\nConsultar usuarios.\n");
+            consultar_usuario();
             break;
 
         case 3:
-            printf("\nEstatisticas.\n");
+            Mostrar_estatisticas();
             break;
 
         case 4:
-            printf("\nInserir usuarios em lote.\n");
+               carregar_arquivo();
             break;
 
-        case 5:
+        case 5: 
             continuar = 0;
             break;
             
@@ -140,6 +179,11 @@ int main() {
         
     }
     printf("\nPrograma finalizado!\n");
+
+
+
+    hash_destruir(hash);
+    bloom_destruir(bloom);
 
     return 0;
 }
