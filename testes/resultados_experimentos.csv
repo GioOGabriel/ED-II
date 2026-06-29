@@ -1,0 +1,4 @@
+quantidade,tempo_sem_bloom,tempo_com_bloom,falsos_positivos,taxa_falsos_positivos,bits_usados,num_funcoes
+1000,0,000000,0,000000,10,1,00,9586,7
+10000,0,002000,0,005000,105,1,05,95851,7
+100000,0,135000,0,204000,1024,1,02,958506,7

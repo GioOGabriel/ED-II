@@ -1,3 +1,5 @@
+#define _DEFAULT_SOURCE
+
 #include "hash.h"
 #include <stdlib.h>  // pro malloc e free
 #include <string.h>  // pro strdup e strcmp
